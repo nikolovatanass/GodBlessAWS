@@ -1,7 +1,7 @@
 resource "aws_cloudwatch_event_rule" "event_bridge_rule" {
   name        = "event-bridge-team"
   description = "Capture each AWS Console Sign In"
-  schedule_expression = "rate(5minutes)"
+  schedule_expression = "cron(0 20 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "sns_event_watch_target" {
