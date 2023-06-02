@@ -38,8 +38,28 @@ resource "aws_iam_role_policy_attachment" "admin" {
 }
 
 resource "aws_cloudwatch_event_target" "role_cloudwatch" {
-  rule      = aws_cloudwatch_event_rule.cloudwatch_event.name
+  rule      = aws_cloudwatch_event_rule.event_bridge_rule.arn
   target_id = aws_codebuild_project.coldbuild_demo.name
   arn       = aws_codebuild_project.coldbuild_demo.arn
+  role_arn = aws_iam_role.code_build.arn
 }
-    
+
+resource "aws_iam_role" "code_build_role" {
+  name = "code-build-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principals = {
+            type = "Service"
+            identifiers = ["events.amazon.com"]
+        }
+      }
+    ]
+  })
+  tags = {
+    name = "role"
+  }
+}

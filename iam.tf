@@ -1,6 +1,6 @@
 # Creating IAM role -----------------------------------------------------------
 resource "aws_iam_role" "code_build" {
-  name = "ssm-mgmt"
+  name = "code-build-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -11,7 +11,7 @@ resource "aws_iam_role" "code_build" {
             type = "Service"
             identifiers = ["cloudbuild.amazon.com"]
         }
-      },
+      }
     ]
   })
   tags = {
